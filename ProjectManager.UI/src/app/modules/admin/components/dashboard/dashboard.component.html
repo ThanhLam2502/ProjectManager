@@ -1,0 +1,119 @@
+<mat-tab-group id="tab-group" animationDuration="0ms" [(selectedIndex)]="tabIndex">
+  <mat-tab *ngFor="let item of projects;">
+    <ng-template mat-tab-label>{{ item.name }}</ng-template>
+    <!-- PROJECT CONTENT -->
+    <ng-template matTabContent>
+      <app-tab-content [project]="item" [users]="users"></app-tab-content>
+    </ng-template>
+    <!-- END PROJECT CONTENT -->
+  </mat-tab>
+
+  <mat-tab disabled *ngIf="isVissibleDropDown">
+    <ng-template mat-tab-label>
+      <button mat-icon-button (click)="popoverDropdown.visible = !popoverDropdown.visible" id="dropdown"
+        class="btn-none">
+        <mat-icon class="btn-dropdown">keyboard_arrow_down</mat-icon>
+      </button>
+    </ng-template>
+  </mat-tab>
+
+</mat-tab-group>
+<!-- POPOVER DROP DOWN -->
+<dx-popover #popoverDropdown target="#dropdown" position="bottom" [width]="200">
+  <div *dxTemplate="let data of 'content'">
+    <!-- DROPDOWN -->
+    <div class="tilte-popover my-2" (click)="collapse.toggle()" [attr.aria-expanded]="!isCollapsed"> Select projects
+    </div>
+    <main #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
+
+      <div *ngIf="projects">
+        <dx-list [dataSource]="projects" itemTemplate="listItem" selectionMode="single" class="list-item-p-0">
+          <div *dxTemplate="let item of 'listItem'; let i = index">
+            <div class="result-wrap project-item" (click)="tabIndex = i; popoverDropdown.visible = false">
+              <div>
+                <span class="project-item">{{ item.name }}</span>
+              </div>
+              <div>
+                <span class="material-icons custom-icon" (click)="upinClick($event, i)">push_pin</span>
+              </div>
+            </div>
+          </div>
+        </dx-list>
+      </div>
+
+    </main>
+    <div class="tilte-popover" (click)="showAllProject()">All projects</div>
+    <!-- END DROPDOWN -->
+  </div>
+</dx-popover>
+<!-- END POPOVER DROP DOWN -->
+
+
+<!-- POPUP TABLE PROJECT -->
+<dx-popup #popupProjects [width]="950" [height]="400" [showTitle]="true" title="Projects" [dragEnabled]="false"
+  [closeOnOutsideClick]="true">
+  <div *dxTemplate="let data of 'content'">
+
+    <dx-data-grid [height]="250" [dataSource]="projects" [allowColumnReordering]="true" [showBorders]="true"
+      (onRowDblClick)="dblSelectTabProject($event)" (onRowRemoved)="removeProject($event)"
+      (onRowUpdating)="editProject($event)">
+
+      <dxo-editing [allowUpdating]="true" [allowDeleting]="true" mode="row">
+      </dxo-editing>
+
+      <!-- (onSelectionChanged)="selectProject($event)" -->
+      <dxo-filter-row [visible]="true"></dxo-filter-row>
+      <dxo-search-panel [visible]="true"></dxo-search-panel>
+      <dxo-selection mode="single"></dxo-selection>
+      <dxo-load-panel [enabled]="true"></dxo-load-panel>
+      <dxo-paging [pageSize]="10"></dxo-paging>
+
+      <dxi-column dataField="id" [allowEditing]="false" sortOrder="asc" [width]="50">
+      </dxi-column>
+      <dxi-column dataField="name"></dxi-column>
+      <dxi-column dataField="startDate" dataType="date">
+      </dxi-column>
+      <dxi-column dataField="endDate" dataType="date">
+      </dxi-column>
+      <dxi-column dataField="status">
+        <dxo-lookup [dataSource]="lookupData" valueExpr="id" displayExpr="name">
+        </dxo-lookup>
+      </dxi-column>
+
+      <dxi-column dataField="assignTo">
+        <dxo-lookup [dataSource]="users" valueExpr="id" displayExpr="name">
+        </dxo-lookup>
+      </dxi-column>
+    </dx-data-grid>
+
+    <dx-button stylingMode="outlined" text="Add" type="default" [width]="100" class="btn-add mt-2"
+      (onClick)="clickShowFormProject($event)">
+    </dx-button>
+
+  </div>
+</dx-popup>
+<!-- END POPUP TABLE PROJECT -->
+
+
+<!-- POPUP ADD PROJECT -->
+<dx-popup #popupAddProject [width]="950" [height]="350" [showTitle]="true" title="Add Projects" [dragEnabled]="false"
+  [closeOnOutsideClick]="false">
+  <form #formProject method="post" *ngIf="project" (submit)="addProject(project)">
+    <dx-form [(formData)]="project">
+      <dxi-item dataField="id" [visible]="false"></dxi-item>
+      <dxi-item dataField="name" [isRequired]="true"></dxi-item>
+      <dxi-item dataField="startDate" [isRequired]="true" editorType="dxDateBox"></dxi-item>
+      <dxi-item dataField="endDate" editorType="dxDateBox"></dxi-item>
+      <dxi-item dataField="status" [isRequired]="true" editorType="dxSelectBox"
+        [editorOptions]="{ dataSource: lookupData, valueExpr: 'id', displayExpr: 'name'}">
+      </dxi-item>
+      <dxi-item dataField="assignTo" [isRequired]="true" editorType="dxSelectBox"
+        [editorOptions]="{ dataSource: users, valueExpr: 'id', displayExpr: 'name'}">
+      </dxi-item>
+      <dxi-item itemType="button" horizontalAlignment="right" [buttonOptions]="buttonOptions">
+      </dxi-item>
+    </dx-form>
+  </form>
+
+</dx-popup>
+<!-- END POPUP ADD -->

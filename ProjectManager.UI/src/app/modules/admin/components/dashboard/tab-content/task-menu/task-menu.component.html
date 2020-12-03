@@ -1,0 +1,49 @@
+<div>
+  <p class="add-task-title mt-3">ADD TO TASK</p>
+  <dx-button *ngIf="isEdit" id="todo" class="add-to-task-button" text="Todo" icon="todo" type="default"
+    (click)="showPopoverTodo($event)">
+  </dx-button>
+
+  <dx-button class="add-to-task-button" id="member" text="Member" icon="user" type="default"
+    (click)="showPopoverMember($event)">
+  </dx-button>
+
+  <dx-button id="status" class="add-to-task-button" text="Status" icon="tags" type="default"
+    (click)="showPopoverStatus($event)">
+  </dx-button>
+
+
+  <p class="add-task-title mt-3">ACTIONS</p>
+  <dx-button class="add-to-task-button" text="Save" icon="save" type="default" (onClick)="submitTask()">
+  </dx-button>
+</div>
+
+<dx-popover #popoverTodo target="#todo" position="bottom" [width]="300">
+  <div *dxTemplate="let data = model of 'content'">
+    <p class="btn-title-add-to-task">Add To-Do</p>
+    <hr>
+    <div class="form-group">
+      <label class="lbl-title-add-to-task">Title: </label>
+      <input #inputAddLstTodo type="text" class="form-control" placeholder="Enter todo">
+    </div>
+    <button type="submit" class="btn btn-submit-todo" (click)="addLstTodo(inputAddLstTodo)">Submit</button>
+  </div>
+</dx-popover>
+
+<dx-popover #popoverStatus target="#status" position="bottom" [width]="200">
+  <div *dxTemplate="let data = model of 'content'">
+    <p class="btn-title-add-to-task">Status</p>
+    <dx-list [dataSource]="statusTask" selectionMode="single" [showSelectionControls]="true"
+      [(selectedItemKeys)]="selectStatus" keyExpr="id" valueExpr="name" displayExpr="name">
+    </dx-list>
+  </div>
+</dx-popover>
+
+<dx-popover #popoverAssignMember target="#member" position="bottom" [width]="200">
+  <div *dxTemplate="let data = model of 'content'">
+    <p class="btn-title-add-to-task">Member</p>
+    <dx-list #dxListMember [dataSource]="users" selectionMode="multiple" [showSelectionControls]="true" [searchEnabled]="true" searchExpr="name"
+      keyExpr="id" valueExpr="name" displayExpr="name" [(selectedItemKeys)]="selectUser">
+    </dx-list>
+  </div>
+</dx-popover>

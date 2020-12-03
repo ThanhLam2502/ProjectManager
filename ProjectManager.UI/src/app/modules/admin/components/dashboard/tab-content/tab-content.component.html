@@ -1,0 +1,280 @@
+<div id="kanban">
+  <dx-scroll-view class="scrollable-board h-100" direction="horizontal" showScrollbar="always">
+
+    <div class="list" *ngFor="let lsTask of project?.tasks;">
+
+      <div [hidden]="lsTask.isEditing" class="list-task-name">
+        <div class="list-title dx-theme-text-color">
+          <span class="task-name-title">{{ lsTask.name }}</span>
+          <span class="badge badge-pill badge-primary badge-custome">{{ lsTask.task.length }}</span>
+        </div>
+        <div class="btn-edit-list-task-name" (click)="onClickEditNameLstTask(lsTask ,inputEditLstTask)">
+          <i class="fas fa-pencil-alt fa-size"></i>
+        </div>
+      </div>
+
+      <input #inputEditLstTask [hidden]="!lsTask.isEditing" type="text" class="task-name-input" [value]="lsTask.name"
+        (focusout)="lsTask.isEditing = false" (keyup.enter)="editNameLstTask($event, lsTask)" />
+
+      <dx-scroll-view class="scrollable-list" direction="vertical" showScrollbar="always">
+        <dx-sortable class="sortable-cards" group="cardsGroup" handle=".can-drag" [data]="lsTask"
+          (onDragStart)="onTaskDragStart($event)" (onReorder)="onTaskDrop($event)" (onAdd)="onTaskDrop($event)">
+
+          <div *ngFor="let task of lsTask.task">
+            <div class="card can-drag dx-card dx-theme-text-color dx-theme-background-color"
+              (click)="onClickEditTask(task)">
+              <div class="card-subject">{{ task.name }}</div>
+              <div class="card-assignee">{{ task.statusTaskString }}</div>
+            </div>
+          </div>
+
+          <div id="addTask" class="card dx-card dx-theme-text-color dx-theme-background-color"
+            (click)="onClickAddTask(lsTask.id)">
+            <div class="card-assignee">Add a task...</div>
+          </div>
+        </dx-sortable>
+      </dx-scroll-view>
+
+    </div>
+
+    <div class="list list-add">
+      <div class="list-add-title dx-theme-text-color">Add List ...</div>
+      <input #inputAddLstTask class="input-add-list ml-2 mt-3" placeholder="Add list task title"
+        (keyup.enter)="addLstTask(inputAddLstTask)">
+    </div>
+  </dx-scroll-view>
+</div>
+
+<dx-popup #popupTask title="Add Task" [showCloseButton]="true" width="1100" class="custom-popup">
+  <div *dxTemplate="let data of 'content'">
+    <div class="container-fluid">
+      <!-- Row 1 -->
+      <div class="row">
+        <div class="col-md-12">
+          <dx-validation-group #validationGroup>
+            <div class="header todos">
+              <dx-text-box [(value)]="taskItem.name" width="100%" placeholder="Task Title">
+                <dx-validator>
+                  <dxi-validation-rule type="required">
+                  </dxi-validation-rule>
+                </dx-validator>
+              </dx-text-box>
+
+              <a class="icon px-3 py-2" (click)="showTaskMenu($event)">
+                <i class="fa fa-bars custom-fa-bars"></i>
+              </a>
+
+            </div>
+          </dx-validation-group>
+        </div>
+      </div>
+      <!-- End row 1 -->
+
+      <!-- Row 2 -->
+      <div class="row">
+        <!-- Col-9 -->
+        <div class="col-md-9">
+          <dx-scroll-view direction="vertical" height="550" [useNative]="true">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="body mt-3">
+                  <div class="member">
+                    <p><b>Member: </b></p>
+                    <div class="member-img ml-3">
+                      <img [src]="member.img" [width]="24" [height]="24" alt="img" class="border-radius-50 ml-1"
+                        *ngFor="let member of taskItem?.members">
+                    </div>
+                  </div>
+                  <p><b>Description</b></p>
+                  <dx-html-editor valueType="html" height="209" [(value)]="taskItem.description">
+                    <dxo-toolbar (multiline)="true">
+                      <dxi-item formatName="bold"></dxi-item>
+                      <dxi-item formatName="italic"></dxi-item>
+                      <dxi-item formatName="underline"></dxi-item>
+                      <dxi-item formatName="separator"></dxi-item>
+
+                      <dxi-item formatName="orderedList"></dxi-item>
+                      <dxi-item formatName="bulletList"></dxi-item>
+                      <dxi-item formatName="separator"></dxi-item>
+
+                      <dxi-item formatName="alignLeft"></dxi-item>
+                      <dxi-item formatName="alignCenter"></dxi-item>
+                      <dxi-item formatName="alignRight"></dxi-item>
+                      <dxi-item formatName="separator"></dxi-item>
+
+                      <dxi-item formatName="header" [formatValues]="[false, 1, 2, 3, 4, 5]"></dxi-item>
+                      <dxi-item formatName="font"
+                        [formatValues]="['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana']">
+                      </dxi-item>
+                      <dxi-item formatName="size"
+                        [formatValues]="['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt']">
+                      </dxi-item>
+                      <dxi-item formatName="color"></dxi-item>
+                      <dxi-item formatName="background"></dxi-item>
+                      <dxi-item formatName="separator"></dxi-item>
+
+                      <dxi-item formatName="link"></dxi-item>
+                      <dxi-item formatName="image"></dxi-item>
+                      <dxi-item formatName="separator"></dxi-item>
+
+                      <dxi-item formatName="clear"></dxi-item>
+                      <dxi-item formatName="strike"></dxi-item>
+                      <dxi-item formatName="separator"></dxi-item>
+
+                      <dxi-item formatName="codeBlock"></dxi-item>
+                      <dxi-item formatName="blockquote"></dxi-item>
+                      <dxi-item formatName="separator"></dxi-item>
+                      <dxi-item formatName="undo"></dxi-item>
+                      <dxi-item formatName="redo"></dxi-item>
+                      <dxi-item formatName="separator"></dxi-item>
+                    </dxo-toolbar>
+
+                  </dx-html-editor>
+                </div>
+                <div class="col-md-12">
+                  <div class="mt-2">
+                    <div *ngFor="let lsTodo of taskItem.todos">
+                      <div class="todos" [hidden]="lsTodo.isEditing" (click)="lsTodo.isCollapsed = !lsTodo.isCollapsed">
+
+                        <div class="list-todo-left">
+                          <div>
+                            <i [hidden]="lsTodo.percent === 100" class="far fa-square"></i> <!-- chua hoan thanh -->
+                            <i [hidden]="lsTodo.percent !== 100" class="far fa-check-square"></i>
+                          </div>
+                          <div class="name-todos py-2 pl-1">{{ lsTodo.name }}</div>
+                        </div>
+
+                        <div class="list-todo-right">
+                          <i class="fas fa-edit p-2" (click)="onClickEditLstTodo($event, lsTodo, inputEditLstTodo)"></i>
+                          <i class="far fa-trash-alt p-2" (click)="onClickDelLstTodo($event, lsTodo)"></i>
+                        </div>
+                      </div>
+
+                      <!-- Input edit Name lsTodo -->
+                      <input #inputEditLstTodo type="text" class="todo-edit py-1 pl-1" [value]="lsTodo.name"
+                        [hidden]="!lsTodo.isEditing" (blur)="lsTodo.isEditing = false"
+                        (keyup.enter)="editLstTodoName($event, lsTodo)">
+
+                      <div [ngbCollapse]="!lsTodo.isCollapsed">
+                        <dx-progress-bar width="100%" [min]="0" [max]="100" [value]="lsTodo.percent"></dx-progress-bar>
+                        <div *ngFor="let todo of lsTodo.todo">
+
+                          <div class="todo" [hidden]="todo.isEditing">
+                            <div class="todo-left">
+                              <input type="checkbox" [checked]="todo.isComplete"
+                                (change)="editTodoComplete($event, todo)">
+                              <div class="name-todo pl-1" (click)="onCLickEditTodo(inputEditTodo, todo)">{{ todo.name }}
+                              </div>
+                            </div>
+
+                            <i class="far fa-trash-alt px-3 py-1" (click)="onClickDelTodo($event, todo)"></i>
+                          </div>
+
+                          <!-- Input edit Name todo -->
+                          <input #inputEditTodo type="text" class="todo-edit ml-3" [value]="todo.name"
+                            [hidden]="!todo.isEditing" (blur)="todo.isEditing = false"
+                            (keyup.enter)="editTodoName($event, todo)">
+                        </div>
+
+                        <!-- Input Add Todo -->
+                        <input type="text" class="input-text-todo my-1 ml-3 mr-3" placeholder="Add an item..."
+                          (keyup.enter)="addTodo($event, lsTodo.id)">
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="write-comment">
+                  <p><b>Comment</b></p>
+                  <div class="py-2 my-2 w-100" *ngIf="!isVidsibleAddNewCmt;" (click)="onClickNewCmt()">
+                    Write an comment...
+                  </div>
+                  <div *ngIf="isVidsibleAddNewCmt;">
+                    <app-write-comment [comment]="commentItem" (onCommentChange)="addComment($event)">
+                    </app-write-comment>
+                  </div>
+                </div>
+
+                <div class="task-comment">
+                  <ng-container *ngFor="let comment of taskItem.comments">
+                    <div class="show-comment ml-0 pt-2">
+                      <div class="flex-center">
+                        <img [src]="comment.img" [width]="24" [height]="24" alt="img" class="border-radius-50 mr-1">
+                        <div class="name-user">{{ comment.userName }}</div>
+                      </div>
+                      <div class="user-comment mb-0" *ngIf="!comment.isEdit" [innerHtml]="comment.cmt">
+                      </div>
+                      <div class="user-comment" *ngIf="comment.isEdit">
+                        <app-write-comment [comment]="comment" (onCommentChange)="editComment($event)">
+                        </app-write-comment>
+                      </div>
+                      <h5 class="small-link">
+                        <span class="link-click" (click)="onClickRepComment(comment)">Reply</span>
+                        <span class="link-click" (click)="comment.isEdit = true; comment.isRep = false">Edit</span>
+                        <span class="link-click" (click)="onClickDelCmt($event, comment)">Delete</span>
+                      </h5>
+
+                      <div *ngIf="comment.inverseParent.length">
+                        <div class="task-comment-collapse" (click)="comment.isCollapsed = !comment.isCollapsed"
+                          *ngIf="!comment.isCollapsed">
+                          {{ comment.inverseParent.length }} replies
+                        </div>
+                        <div class="task-comment-collapse" (click)="comment.isCollapsed = !comment.isCollapsed"
+                          *ngIf="comment.isCollapsed">
+                          Hide {{ comment.inverseParent.length }} replies
+                        </div>
+
+                        <div [ngbCollapse]="!comment.isCollapsed">
+                          <div class="show-comment" *ngFor="let repCmt of comment.inverseParent">
+                            <div class="flex-center">
+                              <img [src]="repCmt.img" [width]="24" [height]="24" alt="img"
+                                class="border-radius-50 mr-1">
+                              <div class="name-user">{{ repCmt.userName }}</div>
+                            </div>
+                            <div class="user-comment" [innerHTML]="repCmt.cmt"></div>
+                            <h5 class="small-link">
+                              <span class="link-click" (click)="repCmt.isEdit = true">Edit</span>
+                              <span class="link-click" (click)="onClickDelCmt($event, repCmt)">Delete</span>
+                            </h5>
+                            <div class="user-comment" *ngIf="repCmt.isEdit">
+                              <app-write-comment [comment]="repCmt" (onCommentChange)="editComment($event)">
+                              </app-write-comment>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="user-comment" *ngIf="comment?.isRep">
+                        <app-write-comment [comment]="commentItem" (onCommentChange)="addRepComment($event)">
+                        </app-write-comment>
+                      </div>
+
+                    </div>
+                  </ng-container>
+                </div>
+
+              </div>
+            </div>
+          </dx-scroll-view>
+        </div>
+        <!-- End col-9 -->
+        <!-- Col-3 -->
+        <div class="col-md-3">
+          <app-task-menu [isEdit]="isEdit" [users]="users" [(task)]="taskItem" (onSubmitedTask)="submitTask()"
+            (addLstTodoTask)="addLstTodo($event)"></app-task-menu>
+        </div>
+        <!-- End col-3 -->
+      </div>
+      <!-- End row 2 -->
+    </div>
+    <div class="task-menu-md" [class.d-block]="isVisibleTaskMenu">
+      <app-task-menu [isEdit]="isEdit" [users]="users" [(task)]="taskItem" (onSubmitedTask)="submitTask()"
+        (addLstTodoTask)="addLstTodo($event)"></app-task-menu>
+    </div>
+  </div>
+</dx-popup>
+
+<app-confirm-box #confirmBox (onConfirm)="onClickConfirm($event)"></app-confirm-box>

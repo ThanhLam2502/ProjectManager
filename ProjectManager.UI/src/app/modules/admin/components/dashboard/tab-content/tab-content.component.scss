@@ -1,0 +1,325 @@
+#kanban {
+  white-space: nowrap;
+}
+
+.list {
+  height: 100%; //calc(100vh - 185px);
+  border-radius: 8px;
+  margin: 5px;
+  background-color: #f4f5f7;
+  display: inline-block;
+  vertical-align: top;
+  white-space: normal;
+}
+
+.list-add {
+  width: 220px;
+  height: 95px;
+}
+
+.list-title {
+  display: flex;
+  font-size: 16px;
+  padding: 10px;
+  padding-left: 30px;
+  margin-bottom: -10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.list-add-title {
+  font-size: 16px;
+  padding: 10px;
+  padding-left: 30px;
+  margin-bottom: -10px;
+  font-weight: bold;
+}
+
+.scrollable-list {
+  height: calc(100vh - 172px);
+  // height: 100%;
+  width: 250px;
+}
+
+.sortable-cards {
+  min-height: 380px;
+}
+
+.card {
+  position: relative;
+  background-color: white;
+  box-sizing: border-box;
+  width: 230px;
+  padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.card-add {
+  position: relative;
+  background-color: white;
+  box-sizing: border-box;
+}
+
+.card-subject {
+  padding-bottom: 10px;
+}
+
+.card-assignee {
+  opacity: 0.6;
+}
+
+.card-priority {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 5px;
+  width: 5px;
+  border-radius: 2px;
+  background: #86c285;
+}
+
+::ng-deep .dx-sortable {
+  display: block;
+}
+// .add-task-title {
+//   font-weight: 700;
+//   color: #2171c1;
+//   font-size: 14px;
+// }
+
+// .add-to-task-button {
+//   width: 100%;
+//   border-radius: 2px;
+//   margin-bottom: 6px;
+//   text-align: left;
+// }
+.dx-button-has-text .dx-button-content {
+  padding: 7px 18px 8px;
+}
+
+.badge-custome {
+  font-size: 12px;
+  height: 18px;
+  white-space: nowrap;
+  max-width: 24px;
+  text-overflow: ellipsis;
+  margin-left: 2px;
+}
+
+.input-add-list {
+  height: 31px;
+  width: 203px;
+}
+
+.btn-save {
+  margin: auto;
+  padding-right: 12px;
+}
+
+.list-task-name {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-edit-list-task-name {
+  padding: 8px 12px;
+}
+
+.fa-size {
+  size: 2px;
+}
+
+.task-name-input {
+  background: transparent;
+  outline: 0;
+  font-weight: bold;
+  margin-left: 12px;
+  width: 224px;
+  height: 37px;
+}
+
+.task-name-title {
+  white-space: nowrap;
+  max-width: 145px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// .btn-title-add-to-task {
+//   font-weight: 600;
+//   font-size: 15px;
+//   text-align: center;
+// }
+
+// .lbl-title-add-to-task {
+//   font-size: medium;
+//   font-weight: 600;
+// }
+
+// .btn-submit-todo {
+//   width: 100%;
+//   background-color: #3cc;
+//   border: none;
+// }
+
+.todos {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.todo-edit {
+  width: 100%;
+  background-color: whitesmoke;
+}
+
+.name-todos {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.todo {
+  display: flex;
+  padding: 4px 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.name-todo {
+  width: 100%;
+}
+
+// ::ng-deep .container-fluid .row .col-md-9 div div .text-todo .input-text-todo{
+//   border: none;
+// }
+
+.input-text-todo {
+  border: none;
+  width: 100%;
+}
+
+.input-text-todo:hover {
+  background-color: whitesmoke;
+}
+
+.list-todo-left {
+  display: flex;
+  align-items: center;
+}
+
+.list-todo-right {
+  display: flex;
+  align-items: center;
+}
+
+.todo-left {
+  display: flex;
+  align-items: center;
+}
+
+.btn-delete-lstTodo {
+  display: flex;
+  justify-content: center;
+}
+
+.custom-fa-bars {
+  font-size: 32px;
+  color: blue;
+}
+
+.container-fluid .row .col-md-12 .header .icon {
+  display: none;
+}
+.task-menu-md {
+  display: none;
+}
+@media screen and (max-width: 992px) {
+  ::ng-deep .custom-popup .dx-overlay-content {
+    width: 100% !important;
+    height: 100% !important;
+    transform: unset !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .container-fluid .row .col-md-3 {
+    display: none;
+  }
+  .container-fluid .row .col-md-12 .header .icon {
+    display: block;
+  }
+  ::ng-deep .custom-popup .dx-overlay-content {
+    position: relative;
+  }
+  .task-menu-md {
+    // display: block;
+    width: 210px;
+    position: absolute;
+    right: 0;
+    top: 117px;
+    background-color: whitesmoke;
+    z-index: 1;
+  }
+}
+
+.show-comment {
+  margin-left: 1.5rem;
+  margin-top: 5px;
+  border-radius: 2px;
+
+  .name-user {
+    font-size: 16px;
+    font-family: ui-monospace;
+    font-weight: bold;
+  }
+  ::ng-deep .ng-star-inserted p{
+    margin-bottom: 0px;
+  }
+  .user-comment {
+    padding: 8px 8px 2px 0px;
+    margin-left: 1.5rem;
+    width: 100%;
+
+    &:hover {
+      background-color: whitesmoke;
+    }
+  }
+  .task-comment-collapse {
+    margin-left: 1.5rem;
+    color: cadetblue;
+    font-family: -webkit-body;
+    padding: 8px 0px;
+  }
+  .small-link {
+    margin: 0 2rem;
+    color: blue;
+
+    .link-click {
+      margin: 0rem 0.5rem;
+    }
+  }
+  .flex-center {
+    display: flex;
+    align-items: center;
+  }
+}
+.task-comment {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.border-radius-50 {
+  border-radius: 50%;
+}
+.member {
+  .member-img {
+    display: flex;
+    align-items: center;
+  }
+}
+
+// ::ng-deep .mat-typography p{
+//   margin-bottom: 0px;
+//   background-color: blue;
+// }

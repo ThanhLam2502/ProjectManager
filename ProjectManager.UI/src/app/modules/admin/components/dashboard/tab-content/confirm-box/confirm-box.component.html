@@ -1,0 +1,9 @@
+<dx-popover #popoverConfirm>
+  <div *dxTemplate="let data of 'content'">
+    <p>Are you sure to delete?</p>
+    <div class="btn-confirm">
+      <button type="button" class="btn btn-outline-primary mr-2" (click)="onClickBtn(true)">Yes</button>
+      <button type="button" class="btn btn-outline-dark" (click)="onClickBtn(false)">No</button>
+    </div>
+  </div>
+</dx-popover>

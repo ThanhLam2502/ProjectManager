@@ -1,0 +1,14 @@
+{
+    "eslint.nodeEnv": "",
+    "eslint.nodePath": "",
+    "eslint.options": {
+
+    },
+    "eslint.runtime": "",
+    "eslint.validate": [
+
+    ],
+    "eslint.workingDirectories": [
+
+    ]
+}
