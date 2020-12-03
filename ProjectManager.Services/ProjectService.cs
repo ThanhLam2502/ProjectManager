@@ -26,7 +26,7 @@ namespace ProjectManager.Services
         public async Task<HttpResponse<List<ProjectTaskViewModel>>> GetProjects()
         {
             var projects = await Repository.GetProjects().ToListAsync();
-            return HttpResponse<List<ProjectTaskViewModel>>.OK(projects); ;
+            return HttpResponse<List<ProjectTaskViewModel>>.OK(projects);
         }
 
         public async Task<HttpResponse<int>> InsertProject(ProjectTaskViewModel model)
