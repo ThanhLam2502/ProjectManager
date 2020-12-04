@@ -8,9 +8,8 @@ namespace ProjectManager.Entities.Services
 {
     public interface ICommentService : IBaseService<Comment>
     {
-        Task<HttpResponse<List<CommentViewModel>>> GetCommentByTaskID(int taskId);
-        Task<HttpResponse<int>> InsertComment(CommentViewModel model);
-        Task<HttpResponse<int>> UpdateCmtContent(CommentViewModel model, int id);
-        Task<HttpResponse<int>> DeleteComment(int id);
+        Task<BaseResult<int>> InsertComment(CommentViewModel model);
+        Task<BaseResult<int>> UpdateCmtContent(CommentViewModel model, int commentId);
+        Task<BaseResult<int>> DeleteComment(int commentId);
     }
 }

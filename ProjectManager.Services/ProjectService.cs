@@ -23,51 +23,52 @@ namespace ProjectManager.Services
             _mapper = mapper;
         }
 
-        public async Task<HttpResponse<List<ProjectTaskViewModel>>> GetProjects()
+        public async Task<BaseResult<List<ProjectTaskViewModel>>> GetProjects()
         {
             var projects = await Repository.GetProjects().ToListAsync();
-            return HttpResponse<List<ProjectTaskViewModel>>.OK(projects);
+            return BaseResult<List<ProjectTaskViewModel>>.OK(projects);
         }
 
-        public async Task<HttpResponse<int>> InsertProject(ProjectTaskViewModel model)
+        public async Task<BaseResult<int>> InsertProject(ProjectTaskViewModel model)
         {
             var project = _mapper.Map<Project>(model);
             await Repository.InsertAsync(project);
-            return HttpResponse<int>.OK(project.Id, Messages.ItemInserted);
+            return BaseResult<int>.OK(project.Id, Messages.ItemInserted);
         }
 
-        public async Task<HttpResponse<int>> DeleteProject(int id)
+        public async Task<BaseResult<int>> DeleteProject(int projectID)
         {
-            var project = await Repository.FindAsync(id);
+            var project = await Repository.FindAsync(projectID);
             if (project == null)
-                return HttpResponse<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
+                return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
 
             project.IsDeleted = true;
-            var saved = await _unitOfWork.SaveChangesAsync();
+            var saved = await Repository.DbContext.SaveChangesAsync();
             if (saved > 0)
-                return HttpResponse<int>.OK(id, Messages.ItemDeleted);
+                return BaseResult<int>.OK(projectID, Messages.ItemDeleted);
 
-            return HttpResponse<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.BadRequest);
+            return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.BadRequest);
 
         }
 
-        public async Task<HttpResponse<int>> UpdateProject(ProjectTaskViewModel model)
+        public async Task<BaseResult<int>> UpdateProject(ProjectTaskViewModel model)
         {
             var project = await Repository.FindAsync(model.Id);
             if (project == null)
-                return HttpResponse<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
+                return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
 
             project.Name = model.Name;
             project.StartDate = model.StartDate;
             project.EndDate = model.EndDate;
             project.AssignTo = model.AssignTo;
             project.Status = model.Status;
-            int saved = await _unitOfWork.SaveChangesAsync();
+
+            int saved = await Repository.DbContext.SaveChangesAsync();
 
             if (saved > 0)
-                return HttpResponse<int>.OK(project.Id, Messages.ItemUpdated);
+                return BaseResult<int>.OK(project.Id, Messages.ItemUpdated);
 
-            return HttpResponse<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.BadRequest);
+            return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.BadRequest);
         }
     }
 }

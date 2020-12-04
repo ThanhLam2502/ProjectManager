@@ -5,11 +5,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using ProjectManager.Entities.Models;
 using ProjectManager.Entities.Services;
 using ProjectManager.Entities.UnitOfWork;
 using ProjectManager.Entities.Utilities;
 using ProjectManager.Repositories;
-using Sample.Entities.Models;
 using System.Security.Claims;
 using System.Text;
 

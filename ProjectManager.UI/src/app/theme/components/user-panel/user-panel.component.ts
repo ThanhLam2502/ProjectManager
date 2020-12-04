@@ -1,7 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
 
-import {UserModel} from '@app/modules/core/models';
 
 
 @Component({
@@ -12,8 +11,6 @@ import {UserModel} from '@app/modules/core/models';
 
 export class UserPanelComponent implements OnInit, OnDestroy {
 
-
-  currentUser: UserModel = new UserModel();
   subscription: Subscription = new Subscription();
 
   constructor() {

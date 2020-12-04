@@ -1,6 +1,9 @@
-﻿namespace ProjectManager.Entities.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace ProjectManager.Entities.Models
 {
-    public partial class Todo
+    public partial class TodoItem
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -8,6 +11,6 @@
         public int? ListTodoId { get; set; }
         public bool? IsDeleted { get; set; }
 
-        public virtual ListTodo ListTodo { get; set; }
+        public virtual TaskTodo ListTodo { get; set; }
     }
 }

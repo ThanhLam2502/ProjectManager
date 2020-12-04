@@ -1,17 +1,19 @@
 ﻿using ProjectManager.Core.Http;
 using ProjectManager.Entities.Models;
 using ProjectManager.Entities.ViewModels;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ProjectManager.Entities.Services
 {
-    public interface ITaskService : IBaseService<TaskProject>
+    public interface ITaskService : IBaseService<TaskItem>
     {
-        Task<HttpResponse<int>> InsertTask(TaskViewModel model);
-        Task<HttpResponse<int>> UpdateTask(TaskViewModel model, int id);
-        Task<HttpResponse<int>> DeleteTask(int id);
-        Task<HttpResponse<int>> InsertListTask(ListTaskViewModel model);
-        Task<HttpResponse<int>> UpdateListTask(ListTaskViewModel model, int id);
-        Task<HttpResponse<int>> DeleteListTask(int id);
+        Task<BaseResult<TaskViewModel>> GetTaskByID(int taskId);
+        Task<BaseResult<int>> InsertTaskItem(TaskViewModel model);
+        Task<BaseResult<int>> UpdateTaskItem(TaskViewModel model, int id);
+        Task<BaseResult<int>> DeleteTaskItem(int id);
+        Task<BaseResult<int>> InsertTasks(ListTaskViewModel model);
+        Task<BaseResult<int>> UpdateTasks(ListTaskViewModel model, int id);
+        Task<BaseResult<int>> DeleteTasks(int id);
     }
 }

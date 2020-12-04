@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ProjectManager.Entities.Models
 {
-    public partial class ListTask
+    public partial class ProjectTask
     {
-        public ListTask()
+        public ProjectTask()
         {
-            TaskProject = new HashSet<TaskProject>();
+            TaskItem = new HashSet<TaskItem>();
         }
 
         public int Id { get; set; }
@@ -15,6 +16,6 @@ namespace ProjectManager.Entities.Models
         public bool? IsDeleted { get; set; }
 
         public virtual Project Project { get; set; }
-        public virtual ICollection<TaskProject> TaskProject { get; set; }
+        public virtual ICollection<TaskItem> TaskItem { get; set; }
     }
 }

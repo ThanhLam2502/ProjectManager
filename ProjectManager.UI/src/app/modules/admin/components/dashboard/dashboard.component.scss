@@ -38,7 +38,12 @@
 .project-item {
   display: flex;
   justify-content: space-between;
-  height: 12px;
+}
+.item-click{
+  padding: 7px;;
+}
+::ng-deep .popover-show-project .dx-list-item .dx-list-item-content{
+  padding: 0px;;
 }
 
 .mat-tab-body-wrapper {

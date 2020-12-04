@@ -1,19 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ProjectManager.Core.Http;
-using ProjectManager.Entities.Models;
+﻿using ProjectManager.Entities.Models;
 using ProjectManager.Entities.Repositories;
 using ProjectManager.Entities.ViewModels;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ProjectManager.Repositories.Repostitory
 {
     public static class CommentRepository
     {
-        public static async Task<HttpResponse<List<CommentViewModel>>> GetCommentByTaskID(this IRepository<Comment> repository, int taskId)
+        public static IQueryable<CommentViewModel> GetCommentByTaskID(this IRepository<Comment> repository, int taskId)
         {
-            var query = await repository.Entities
+            return repository.Entities
                 .Where(cmt => cmt.TaskId == taskId && cmt.ParentId == null && cmt.IsDeleted != true)
                .Select(cmt => new CommentViewModel
                {
@@ -36,9 +32,7 @@ namespace ProjectManager.Repositories.Repostitory
                        TaskId = cm.TaskId,
                        ParentId = cm.ParentId,
                    })
-               }).ToListAsync();
-
-            return HttpResponse<List<CommentViewModel>>.OK(query);
+               });
         }
 
     }

@@ -154,9 +154,9 @@
                       <input #inputEditLstTodo type="text" class="todo-edit py-1 pl-1" [value]="lsTodo.name"
                         [hidden]="!lsTodo.isEditing" (blur)="lsTodo.isEditing = false"
                         (keyup.enter)="editLstTodoName($event, lsTodo)">
+                      <dx-progress-bar width="100%" [min]="0" [max]="100" [value]="lsTodo.percent"></dx-progress-bar>
 
                       <div [ngbCollapse]="!lsTodo.isCollapsed">
-                        <dx-progress-bar width="100%" [min]="0" [max]="100" [value]="lsTodo.percent"></dx-progress-bar>
                         <div *ngFor="let todo of lsTodo.todo">
 
                           <div class="todo" [hidden]="todo.isEditing">

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ProjectManager.Entities.Models
 {
@@ -17,7 +18,7 @@ namespace ProjectManager.Entities.Models
         public bool? IsDeleted { get; set; }
 
         public virtual Comment Parent { get; set; }
-        public virtual TaskProject Task { get; set; }
+        public virtual TaskItem Task { get; set; }
         public virtual User User { get; set; }
         public virtual ICollection<Comment> InverseParent { get; set; }
     }

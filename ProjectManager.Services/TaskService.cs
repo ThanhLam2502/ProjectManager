@@ -1,37 +1,65 @@
 ﻿using AutoMapper;
 using ProjectManager.Core.Http;
 using ProjectManager.Entities.Models;
+using ProjectManager.Entities.Repositories;
 using ProjectManager.Entities.Resources;
 using ProjectManager.Entities.Services;
 using ProjectManager.Entities.UnitOfWork;
 using ProjectManager.Entities.ViewModels;
+using ProjectManager.Repositories.Repostitory;
 using System.Threading.Tasks;
 
 namespace ProjectManager.Services
 {
-    public class TaskService : BaseService<TaskProject>, ITaskService
+    public class TaskService : BaseService<TaskItem>, ITaskService
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IRepository<ProjectTask> _reposProjectTask;
+        private readonly IRepository<Comment> _reposComment;
+        private readonly IRepository<TaskTodo> _reposTodos;
+        private readonly IRepository<User> _reposUsers;
 
-        public TaskService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork)
+        public TaskService(IUnitOfWork unitOfWork, 
+            IMapper mapper,
+            IRepository<ProjectTask> reposProjectTask, 
+            IRepository<Comment> reposComment,
+            IRepository<TaskTodo> reposTodos,
+            IRepository<User> reposUsers
+            ) : base(unitOfWork)
         {
-            _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
+            _reposProjectTask = reposProjectTask;
+            _reposComment = reposComment;
+            _reposTodos = reposTodos;
+            _reposUsers = reposUsers;
         }
 
-        public async Task<HttpResponse<int>> InsertTask(TaskViewModel model)
+
+        public async Task<BaseResult<TaskViewModel>> GetTaskByID(int taskId)
         {
-            var task = _mapper.Map<TaskProject>(model);
-            await Repository.InsertAsync(task);
-            return HttpResponse<int>.OK(task.Id, Messages.ItemInserted);
+            var task = await Repository.FindAsync(taskId);
+            var taskViewModel = _mapper.Map<TaskViewModel>(task);
+            taskViewModel.Comments = _reposComment.GetCommentByTaskID(taskViewModel.Id);
+            taskViewModel.Todos = _reposTodos.GetTodosByTaskID(taskViewModel.Id);
+            taskViewModel.Members = _reposUsers.GetUsersByTaskId(taskViewModel.Id);
+            return BaseResult<TaskViewModel>.OK(taskViewModel);
         }
 
-        public async Task<HttpResponse<int>> UpdateTask(TaskViewModel model, int id)
+
+        public async Task<BaseResult<int>> InsertTaskItem(TaskViewModel model)
+        {
+            var task = _mapper.Map<TaskItem>(model);
+            await Repository.InsertAsync(task);
+            return BaseResult<int>.OK(task.Id, Messages.ItemInserted);
+        }
+
+        public async Task<BaseResult<int>> UpdateTaskItem(TaskViewModel model, int id)
         {
             var task = await Repository.FindAsync(id);
             if (task == null)
-                return HttpResponse<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
+                return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
 
             task.Name = model.Name;
             task.Description = model.Description;
@@ -39,66 +67,69 @@ namespace ProjectManager.Services
             task.Status = model.Status;
             task.ListTaskId = model.ListTaskId;
 
-            int saved = await _unitOfWork.SaveChangesAsync();
+            int saved = await Repository.SaveChangesAsync();
 
+            // Cho phep thay doi hoac khong thay doi
             if (saved >= 0)
-                return HttpResponse<int>.OK(task.Id, Messages.ItemUpdated);
+                return BaseResult<int>.OK(task.Id, Messages.ItemUpdated);
 
-            return HttpResponse<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.BadRequest);
+            return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.BadRequest);
         }
 
-        public async Task<HttpResponse<int>> DeleteTask(int id)
+        public async Task<BaseResult<int>> DeleteTaskItem(int id)
         {
             var task = await Repository.FindAsync(id);
             if (task == null)
-                return HttpResponse<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
+                return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
 
             task.IsDeleted = true;
-            var saved = await _unitOfWork.SaveChangesAsync();
+            var saved = await Repository.SaveChangesAsync();
             if (saved > 0)
-                return HttpResponse<int>.OK(id, Messages.ItemDeleted);
+                return BaseResult<int>.OK(id, Messages.ItemDeleted);
 
-            return HttpResponse<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.BadRequest);
+            return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.BadRequest);
         }
 
-        public async Task<HttpResponse<int>> InsertListTask(ListTaskViewModel model)
+
+
+        public async Task<BaseResult<int>> InsertTasks(ListTaskViewModel model)
         {
-            var repos = _unitOfWork.Repository<ListTask>();
-            var listTask = _mapper.Map<ListTask>(model);
-            await repos.InsertAsync(listTask);
-            return HttpResponse<int>.OK(listTask.Id, Messages.ItemInserted);
+            var listTask = _mapper.Map<ProjectTask>(model);
+
+            await _reposProjectTask.InsertAsync(listTask);
+
+            return BaseResult<int>.OK(listTask.Id, Messages.ItemInserted);
         }
 
-        public async Task<HttpResponse<int>> UpdateListTask(ListTaskViewModel model, int id)
+        public async Task<BaseResult<int>> UpdateTasks(ListTaskViewModel model, int id)
         {
-            var repos = _unitOfWork.Repository<ListTask>();
-            var listTask = await repos.FindAsync(id);
+            var listTask = await _reposProjectTask.FindAsync(id);
             if (listTask == null)
-                return HttpResponse<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
+                return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
 
             listTask.Name = model.Name;
             listTask.ProjectId = model.ProjectId;
-            int saved = await _unitOfWork.SaveChangesAsync();
+            int saved = await _reposProjectTask.SaveChangesAsync();
 
             if (saved > 0)
-                return HttpResponse<int>.OK(listTask.Id, Messages.ItemUpdated);
+                return BaseResult<int>.OK(listTask.Id, Messages.ItemUpdated);
 
-            return HttpResponse<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.BadRequest);
+            return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.BadRequest);
         }
 
-        public async Task<HttpResponse<int>> DeleteListTask(int id) //aaa
+        public async Task<BaseResult<int>> DeleteTasks(int id) 
         {
-            var repos = _unitOfWork.Repository<ListTask>();
-            var listTask = await repos.FindAsync(id);
+            var listTask = await _reposProjectTask.FindAsync(id);
             if (listTask == null)
-                return HttpResponse<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
+                return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
 
             listTask.IsDeleted = true;
-            var saved = await _unitOfWork.SaveChangesAsync();
+            var saved = await _reposProjectTask.SaveChangesAsync();
             if (saved > 0)
-                return HttpResponse<int>.OK(id, Messages.ItemDeleted);
+                return BaseResult<int>.OK(id, Messages.ItemDeleted);
 
-            return HttpResponse<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.BadRequest);
+            return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.BadRequest);
         }
+
     }
 }

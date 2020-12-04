@@ -9,10 +9,10 @@ namespace ProjectManager.APIs.Configurations
         public AutoMapperConfig()
         {
             CreateMap<ProjectTaskViewModel, Project>().ReverseMap();
-            CreateMap<ListTaskViewModel, ListTask>().ReverseMap();
-            CreateMap<TaskViewModel, TaskProject>().ReverseMap();
-            CreateMap<ListTodoViewModel, ListTodo>().ReverseMap();
-            CreateMap<TodoViewModel, Todo>().ReverseMap();
+            CreateMap<ListTaskViewModel, ProjectTask>().ReverseMap();
+            CreateMap<TaskViewModel, TaskItem>().ReverseMap();
+            CreateMap<ListTodoViewModel, TaskTodo>().ReverseMap();
+            CreateMap<TodoViewModel, TodoItem>().ReverseMap();
             CreateMap<CommentViewModel, Comment>().ReverseMap();
             CreateMap<UserViewModel, User>().ReverseMap();
         }

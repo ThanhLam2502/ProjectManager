@@ -103,6 +103,9 @@ namespace ProjectManager.Repositories
 
             DbContext.SaveChanges();
         }
-
+		public async Task<int> SaveChangesAsync()
+		{
+			return await DbContext.SaveChangesAsync();
+		}
 	}
 }

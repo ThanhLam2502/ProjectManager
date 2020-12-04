@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace ProjectManager.Core.Http
 {
-    public class HttpResponse : IHttpResponse
+    public class BaseResult : IBaseResult
     {
         [JsonIgnore]
         public int StatusCode { get; set; }
@@ -11,15 +11,15 @@ namespace ProjectManager.Core.Http
         public string Message { get; set; }
     }
 
-    public class HttpResponse<T> : HttpResponse, IHttpResponse<T>
+    public class BaseResult<T> : BaseResult, IHttpResponse<T>
     {
         public T Data { get; set; }
 
-        public static HttpResponse<T> OK(T data = default(T)
+        public static BaseResult<T> OK(T data = default(T)
             , string message = null
             , HttpStatusCode statusCode = HttpStatusCode.OK)
         {
-            return new HttpResponse<T>()
+            return new BaseResult<T>()
             {
                 Data = data,
                 Message = message,
@@ -27,10 +27,10 @@ namespace ProjectManager.Core.Http
             };
         }
 
-        public static HttpResponse<T> Error(string message = null
+        public static BaseResult<T> Error(string message = null
             , HttpStatusCode statusCode = HttpStatusCode.InternalServerError)
         {
-            return new HttpResponse<T>()
+            return new BaseResult<T>()
             {
                 Message = message,
                 StatusCode = (int)statusCode

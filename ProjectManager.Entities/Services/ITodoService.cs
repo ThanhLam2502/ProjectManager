@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace ProjectManager.Entities.Services
 {
-    public interface ITodoService : IBaseService<Todo>
+    public interface ITodoService : IBaseService<TodoItem>
     {
-        Task<HttpResponse<int>> InsertTodo(TodoViewModel model);
-        Task<HttpResponse<int>> UpdateTodo(TodoViewModel model, int id);
-        Task<HttpResponse<int>> DeleteTodo(int id);
+        Task<BaseResult<int>> InsertTodo(TodoViewModel model);
+        Task<BaseResult<int>> UpdateTodo(TodoViewModel model, int id);
+        Task<BaseResult<int>> DeleteTodo(int id);
 
-        Task<HttpResponse<List<ListTodoViewModel>>> GetTodosByTaskID(int taskId);
-        Task<HttpResponse<int>> InsertListTodo(ListTodoViewModel model);
-        Task<HttpResponse<int>> UpdateListTodo(ListTodoViewModel model, int id);
-        Task<HttpResponse<int>> DeleteListTodo(int id);
+        Task<BaseResult<List<ListTodoViewModel>>> GetTodosByTaskID(int taskId);
+        Task<BaseResult<int>> InsertListTodo(ListTodoViewModel model);
+        Task<BaseResult<int>> UpdateListTodo(ListTodoViewModel model, int id);
+        Task<BaseResult<int>> DeleteListTodo(int id);
     }
 }

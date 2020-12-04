@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { CommentViewModel } from '@app/modules/core/models/project';
+import { CommentViewModel } from '@app/modules/admin/models/project';
 import { DxHtmlEditorComponent } from 'devextreme-angular';
 
 @Component({

@@ -5,9 +5,6 @@ import { MatIconModule } from '@angular/material/icon';
 //
 import { MatTabsModule } from '@angular/material/tabs';
 import { RouterModule } from '@angular/router';
-import { SearchFormComponent } from '@app/modules/admin/components/shared/search-form/search-form.component';
-import { BookingService, PartnerService } from '@app/modules/admin/services';
-import { BoatService } from '@app/modules/admin/services/boat.services';
 import { SharedModule } from '@app/shared/shared.module';
 import { ThemeModule } from '@app/theme';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -21,9 +18,6 @@ import { TaskMenuComponent } from './components/dashboard/tab-content/task-menu/
 import { WriteCommentComponent } from './components/dashboard/tab-content/write-comment/write-comment.component';
 
 const PROVIDERS = [
-  BookingService,
-  PartnerService,
-  BoatService
 ];
 
 @NgModule({
@@ -44,9 +38,9 @@ const PROVIDERS = [
         path: '',
         component: AdminComponent,
         children: [
-          { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+          { path: '', redirectTo: 'projects', pathMatch: 'full' },
           {
-            path: 'dashboard',
+            path: 'projects',
             component: DashboardComponent
           }
         ]
@@ -56,7 +50,6 @@ const PROVIDERS = [
   declarations: [
     DashboardComponent,
     AdminComponent,
-    SearchFormComponent,
     TabContentComponent,
     TaskMenuComponent,
     ConfirmBoxComponent,

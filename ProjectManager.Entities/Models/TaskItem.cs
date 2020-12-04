@@ -2,12 +2,12 @@
 
 namespace ProjectManager.Entities.Models
 {
-    public partial class TaskProject
+    public partial class TaskItem
     {
-        public TaskProject()
+        public TaskItem()
         {
             Comment = new HashSet<Comment>();
-            ListTodo = new HashSet<ListTodo>();
+            TaskTodo = new HashSet<TaskTodo>();
             TaskUser = new HashSet<TaskUser>();
         }
 
@@ -19,9 +19,9 @@ namespace ProjectManager.Entities.Models
         public int? ListTaskId { get; set; }
         public bool? IsDeleted { get; set; }
 
-        public virtual ListTask ListTask { get; set; }
+        public virtual ProjectTask ListTask { get; set; }
         public virtual ICollection<Comment> Comment { get; set; }
-        public virtual ICollection<ListTodo> ListTodo { get; set; }
+        public virtual ICollection<TaskTodo> TaskTodo { get; set; }
         public virtual ICollection<TaskUser> TaskUser { get; set; }
     }
 }

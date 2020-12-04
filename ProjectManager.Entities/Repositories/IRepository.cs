@@ -27,6 +27,9 @@ namespace ProjectManager.Entities.Repositories
 		void Delete(object id);
 		void Delete(TEntity entity);
 		void DeleteRange(IEnumerable<TEntity> entities);
-       
-    }
+
+        Task<int> SaveChangesAsync();
+	
+
+	}
 }

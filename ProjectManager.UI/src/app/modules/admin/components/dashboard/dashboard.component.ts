@@ -2,7 +2,7 @@ import { ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
 import { PmService } from '@app/modules/admin/services/pm.service';
-import { ProjectViewModel, UserViewModel } from '@app/modules/core/models/project';
+import { ProjectViewModel, UserViewModel } from '@app/modules/admin/models/project';
 import { DxPopoverComponent } from 'devextreme-angular';
 import { DxFormComponent } from 'devextreme-angular/ui/form';
 import notify from 'devextreme/ui/notify';
@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
 
   getProjects(): void {
     this.pmServive.getProjects().subscribe((item) => {
-      this.projects = item;
+      this.projects = item.data;
       this.isVissibleDropDown = true;
     });
   }

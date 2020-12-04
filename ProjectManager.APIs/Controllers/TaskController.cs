@@ -16,48 +16,56 @@ namespace ProjectManager.APIs.Controllers
             _taskService = taskService;
         }
 
-        // POST api/tasks
+        
         [HttpPost]
-        public async Task<IActionResult> InsertListTask([FromBody] ListTaskViewModel model)
+        public async Task<IActionResult> InsertTasks([FromBody] ListTaskViewModel model)
         {
-            var response = await _taskService.InsertListTask(model);
+            var response = await _taskService.InsertTasks(model);
             return StatusCode(response);
         }
-        // PUT api/tasks/5
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateListTask([FromBody] ListTaskViewModel model, int id)
+      
+        [HttpPut("{listId:int}")]
+        public async Task<IActionResult> UpdateTasks([FromBody] ListTaskViewModel model, [FromRoute] int listId)
         {
-            var response = await _taskService.UpdateListTask(model, id);
+            var response = await _taskService.UpdateTasks(model, listId);
             return StatusCode(response);
         }
-        // DELETE api/tasks/3
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteListTask(int id)
+   
+        [HttpDelete("{listId:int}")]
+        public async Task<IActionResult> DeleteTasks([FromRoute] int listId)
         {
-            var response = await _taskService.DeleteListTask(id);
-            return StatusCode(response);
-        }
-
-        // POST api/tasks/task
-        [HttpPost("task")]
-        public async Task<IActionResult> InsertTask([FromBody] TaskViewModel model)
-        {
-            var response = await _taskService.InsertTask(model);
+            var response = await _taskService.DeleteTasks(listId);
             return StatusCode(response);
         }
 
-        // PUT api/tasks/task/2
-        [HttpPut("task/{id:int}")]
-        public async Task<IActionResult> UpdateTask([FromBody] TaskViewModel model, int id)
+        [HttpGet("task_item/{taskId:int}")]
+        public async Task<IActionResult> GetTaskByID([FromRoute] int taskId)
         {
-            var response = await _taskService.UpdateTask(model, id);
+            var response = await _taskService.GetTaskByID(taskId);
             return StatusCode(response);
         }
-        // DELETE api/tasks/task/2
-        [HttpDelete("task/{id:int}")]
-        public async Task<IActionResult> DeleteTask(int id)
+
+
+        [HttpPost("task_item")]
+        public async Task<IActionResult> InsertTaskItem([FromBody] TaskViewModel model)
         {
-            var response = await _taskService.DeleteTask(id);
+            var response = await _taskService.InsertTaskItem(model);
+            return StatusCode(response);
+        }
+
+       
+        [HttpPut("task_item/{taskId:int}")]
+        public async Task<IActionResult> UpdateTaskItem([FromBody] TaskViewModel model, [FromRoute] int taskId)
+        {
+            var response = await _taskService.UpdateTaskItem(model, taskId);
+            return StatusCode(response);
+        }
+
+       
+        [HttpDelete("task_item/{taskId:int}")]
+        public async Task<IActionResult> DeleteTaskItem([FromRoute] int taskId)
+        {
+            var response = await _taskService.DeleteTaskItem(taskId);
             return StatusCode(response);
         }
 

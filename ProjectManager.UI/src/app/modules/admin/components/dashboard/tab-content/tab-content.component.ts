@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { PmService } from '@app/modules/admin/services/pm.service';
-import { CommentViewModel, ListTaskViewModel, ListTodoViewModel, ProjectViewModel, TaskViewModel, TodoViewModel, UserViewModel } from '@app/modules/core/models/project';
+import { CommentViewModel, ListTaskViewModel, ListTodoViewModel, ProjectViewModel, TaskViewModel, TodoViewModel, UserViewModel } from '@app/modules/admin/models/project';
 import { DxPopupComponent, DxValidationGroupComponent } from 'devextreme-angular';
 import { confirm } from 'devextreme/ui/dialog';
 import notify from 'devextreme/ui/notify';
@@ -70,20 +70,11 @@ export class TabContentComponent implements OnInit {
   }
 
   onClickEditTask(task: TaskViewModel) {
-    // get Todo & todo item
-    this.pmServive.getTodosByTaskId(task.id).subscribe((item) => {
-      task.todos = item.data;
-    })
-    // get comment in task
-    this.pmServive.getCommentsByTaskId(task.id).subscribe((item) => {
-      task.comments = item.data;
+    // get taskInfo
+    this.pmServive.getTaskByTaskId(task.id).subscribe((item) => {
+      this.taskItem = item.data;
+      this.popupTask.instance.show();
     });
-    // get member in task
-    this.pmServive.getUserByTaskId(task.id).subscribe((item) => {
-      task.members = item.data;
-    });
-    this.taskItem = task;
-    this.popupTask.instance.show();
   }
 
   editTask(task: TaskViewModel): void {

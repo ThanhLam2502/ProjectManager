@@ -1,13 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using ProjectManager.Entities.UnitOfWork;
 using ProjectManager.Entities.Models;
+using ProjectManager.Entities.Repositories;
+using ProjectManager.Entities.UnitOfWork;
+using ProjectManager.Entities.Utilities;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
-using Sample.Entities.Models;
-using ProjectManager.Entities.Utilities;
-using ProjectManager.Entities.Repositories;
 
 namespace ProjectManager.Repositories
 {

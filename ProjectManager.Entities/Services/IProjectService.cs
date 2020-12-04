@@ -8,9 +8,9 @@ namespace ProjectManager.Entities.Services
 {
     public interface IProjectService : IBaseService<Project>
     {
-        Task<HttpResponse<List<ProjectTaskViewModel>>> GetProjects();
-        Task<HttpResponse<int>> InsertProject(ProjectTaskViewModel model);
-        Task<HttpResponse<int>> UpdateProject(ProjectTaskViewModel model);
-        Task<HttpResponse<int>> DeleteProject(int id);
+        Task<BaseResult<List<ProjectTaskViewModel>>> GetProjects();
+        Task<BaseResult<int>> InsertProject(ProjectTaskViewModel model);
+        Task<BaseResult<int>> UpdateProject(ProjectTaskViewModel model);
+        Task<BaseResult<int>> DeleteProject(int projectID);
     }
 }

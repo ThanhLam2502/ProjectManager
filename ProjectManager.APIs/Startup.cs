@@ -1,18 +1,21 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using NLog;
 using ProjectManager.APIs.Configurations;
+using ProjectManager.Entities.Models;
+using ProjectManager.Entities.Repositories;
 using ProjectManager.Entities.Services;
 using ProjectManager.Entities.Utilities;
+using ProjectManager.Repositories;
 using ProjectManager.Services;
+using System.Collections.Generic;
+using System.IO;
 
 namespace ProjectManager.APIs
 {
@@ -39,6 +42,9 @@ namespace ProjectManager.APIs
             // Authentication
             //services.RegisterAuthentication(settings);
 
+            // DBContext
+            services.AddScoped<DbContext, AppContext>();
+
             //BEGIN SERVICE
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<IUserService, UserService>();
@@ -46,6 +52,11 @@ namespace ProjectManager.APIs
             services.AddScoped<ITodoService, TodoService>();
             services.AddScoped<ICommentService, CommentService>();
             //END SERVICE
+
+            // Repository
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+           
 
             #region auto mapper
             services.AddSingleton<IMapper, Mapper>();

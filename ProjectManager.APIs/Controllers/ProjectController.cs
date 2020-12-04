@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ProjectManager.Entities.Resources;
 using ProjectManager.Entities.Services;
-using ProjectManager.Entities.Utilities;
 using ProjectManager.Entities.ViewModels;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ProjectManager.APIs.Controllers
@@ -44,10 +40,10 @@ namespace ProjectManager.APIs.Controllers
         }
 
         // DELETE api/projects/5
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteProjectAsync(int id)
+        [HttpDelete("{projectID:int}")]
+        public async Task<IActionResult> DeleteProject([FromRoute]int projectID)
         {
-            var response = await _projectService.DeleteProject(id);
+            var response = await _projectService.DeleteProject(projectID);
             return StatusCode(response);
         }
 

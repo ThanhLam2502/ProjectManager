@@ -1,28 +1,26 @@
-import {Injectable} from '@angular/core';
-import {Router} from '@angular/router';
-import {Observable, ReplaySubject, of} from 'rxjs';
-import {NgxPermissionsService} from 'ngx-permissions';
-import {JwtHelperService} from '@auth0/angular-jwt';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { Observable, ReplaySubject, of } from 'rxjs';
+import { NgxPermissionsService } from 'ngx-permissions';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
-import {environment} from '@environment';
-import {randomLoggedUser} from '@app/data/auth';
 import {
   ACCESS_TOKEN_KEY, IMAGE_TOKEN_KEY, REFRESH_TOKEN_KEY,
-  HOME_URL_KEY, REMEMBER_ME_KEY
+  HOME_URL_KEY
 } from '@app/shared/constants';
-import {API_ENDPOINT} from '@app/shared/endpoints';
-import {AccessTokenResponse, UserModel} from '@app/modules/core/models';
-import {AppStorage, ImageUtility} from '@app/utilities';
-import {ApiService} from '@app/modules/core/services/api.service';
+import { API_ENDPOINT } from '@app/shared/endpoints';
+import { AccessTokenResponse, UserModel } from '@app/modules/core/models';
+import { AppStorage, ImageUtility } from '@app/utilities';
+import { ApiService } from '@app/modules/core/services/api.service';
 
 @Injectable()
 export class AuthenticationService {
   private isRefreshingToken = false;
 
   constructor(private router: Router,
-              private jwtHelper: JwtHelperService,
-              private permissionsService: NgxPermissionsService,
-              private apiService: ApiService) {
+    private jwtHelper: JwtHelperService,
+    private permissionsService: NgxPermissionsService,
+    private apiService: ApiService) {
   }
 
   removeTokens() {

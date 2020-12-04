@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 namespace ProjectManager.Services
 {
     public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : class {
-		protected readonly IRepository<TEntity> Repository;        
+        protected readonly IRepository<TEntity> Repository;
 
         protected readonly IUnitOfWork UnitOfWork;
 
-		public BaseService(IUnitOfWork unitOfWork)
-		{
-			UnitOfWork = unitOfWork;
-			Repository = UnitOfWork.Repository<TEntity>();            
+        public BaseService(IUnitOfWork unitOfWork)
+        {
+            UnitOfWork = unitOfWork;
+            Repository = UnitOfWork.Repository<TEntity>();
         }
 
         public TEntity Find(params object[] keyValues)
@@ -40,12 +40,12 @@ namespace ProjectManager.Services
 
         public void Delete(object id)
         {
-            Repository.Delete(id);            
+            Repository.Delete(id);
         }
 
         public void Insert(TEntity entity)
         {
-            Repository.Insert(entity);            
+            Repository.Insert(entity);
         }
 
         public async Task InsertAsync(TEntity entity)
@@ -61,6 +61,11 @@ namespace ProjectManager.Services
         public virtual object LoadDataSource(DataSourceLoadOptions loadOptions)
         {
             return DataSourceLoader.Load(Repository.Entities, loadOptions);
+        }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await Repository.SaveChangesAsync();
         }
     }
 }

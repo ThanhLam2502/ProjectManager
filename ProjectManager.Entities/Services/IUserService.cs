@@ -8,7 +8,6 @@ namespace ProjectManager.Entities.Services
 {
     public interface IUserService : IBaseService<User>
     {
-        Task<HttpResponse<List<UserViewModel>>> GetAllUsers();
-        Task<HttpResponse<List<UserViewModel>>> GetUsersByTaskId(int taskId);
+        Task<BaseResult<List<UserViewModel>>> GetAllUsers();
     }
 }

@@ -26,7 +26,6 @@ namespace ProjectManager.Entities.ViewModels
     }
     public class TaskViewModel
     {
-     
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -52,7 +51,6 @@ namespace ProjectManager.Entities.ViewModels
         public string Name { get; set; }
         public bool? IsComplete { get; set; }
         public int? ListTodoId { get; set; }
-
     }
 
     public class CommentViewModel
@@ -72,6 +70,5 @@ namespace ProjectManager.Entities.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string Img { get; set; }
-
     }
 }

@@ -9,7 +9,7 @@ namespace ProjectManager.Repositories.Repostitory
     {
         public static IQueryable<ProjectTaskViewModel> GetProjects(this IRepository<Project> repository)
         {
-            var query = repository.Entities
+            return repository.Entities
                 .Where(project => project.IsDeleted != true)
                 .Select(project => new ProjectTaskViewModel
                 {
@@ -19,14 +19,14 @@ namespace ProjectManager.Repositories.Repostitory
                     EndDate = project.EndDate,
                     Status = project.Status,
                     AssignTo = project.AssignTo,
-                    Tasks = project.ListTask
+                    Tasks = project.ProjectTask
                     .Where(lstask => lstask.IsDeleted != true)
                     .Select(lstask => new ListTaskViewModel
                     {
                         Id = lstask.Id,
                         Name = lstask.Name,
                         ProjectId = lstask.ProjectId,
-                        Task = lstask.TaskProject
+                        Task = lstask.TaskItem
                         .Where(task => task.IsDeleted != true)
                         .Select(task => new TaskViewModel
                         {
@@ -39,8 +39,6 @@ namespace ProjectManager.Repositories.Repostitory
                         })
                     })
                 });
-            
-            return query;
         }
     }
 }

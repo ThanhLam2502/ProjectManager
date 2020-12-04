@@ -8,7 +8,7 @@ namespace ProjectManager.APIs.Controllers
     public class BaseApiController : ControllerBase
     {
         [NonAction]
-        public virtual ActionResult StatusCode(IHttpResponse response)
+        public virtual ActionResult StatusCode(IBaseResult response)
         {
             return StatusCode(response.StatusCode, response);
         }

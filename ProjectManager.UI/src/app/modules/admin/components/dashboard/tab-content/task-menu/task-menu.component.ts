@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { TaskViewModel, UserViewModel } from '@app/modules/core/models/project';
+import { TaskViewModel, UserViewModel } from '@app/modules/admin/models/project';
 import { DxListComponent, DxPopoverComponent } from 'devextreme-angular';
 
 @Component({

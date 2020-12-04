@@ -1,4 +1,5 @@
-﻿using ProjectManager.Core.Http;
+﻿using Microsoft.EntityFrameworkCore;
+using ProjectManager.Core.Http;
 using ProjectManager.Entities.Models;
 using ProjectManager.Entities.Services;
 using ProjectManager.Entities.UnitOfWork;
@@ -18,16 +19,10 @@ namespace ProjectManager.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<HttpResponse<List<UserViewModel>>> GetAllUsers()
+        public async Task<BaseResult<List<UserViewModel>>> GetAllUsers()
         {
-            var users = await Repository.GetAllUsers();
-            return users;
-        }
-        public async Task<HttpResponse<List<UserViewModel>>> GetUsersByTaskId(int taskId)
-        {
-            var repos = _unitOfWork.Repository<TaskProject>();
-            var users = await repos.GetUsersByTaskId(taskId);
-            return users;
+            var users = await Repository.GetAllUsers().ToListAsync();
+            return BaseResult<List<UserViewModel>>.OK(users);
         }
     }
 }

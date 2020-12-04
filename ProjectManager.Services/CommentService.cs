@@ -5,8 +5,6 @@ using ProjectManager.Entities.Resources;
 using ProjectManager.Entities.Services;
 using ProjectManager.Entities.UnitOfWork;
 using ProjectManager.Entities.ViewModels;
-using ProjectManager.Repositories.Repostitory;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ProjectManager.Services
@@ -22,48 +20,42 @@ namespace ProjectManager.Services
             _mapper = mapper;
         }
 
-        public Task<HttpResponse<List<CommentViewModel>>> GetCommentByTaskID(int taskId)
-        {
-            var comments = Repository.GetCommentByTaskID(taskId);
-            return comments;
-        }
-
-        public async Task<HttpResponse<int>> InsertComment(CommentViewModel model)
+        public async Task<BaseResult<int>> InsertComment(CommentViewModel model)
         {
             var comment = _mapper.Map<Comment>(model);
             await Repository.InsertAsync(comment);
-            return HttpResponse<int>.OK(comment.Id, Messages.ItemInserted);
+            return BaseResult<int>.OK(comment.Id, Messages.ItemInserted);
         }
 
-        public async Task<HttpResponse<int>> UpdateCmtContent(CommentViewModel model, int id)
+        public async Task<BaseResult<int>> UpdateCmtContent(CommentViewModel model, int commentId)
         {
-            var comment = await Repository.FindAsync(id);
+            var comment = await Repository.FindAsync(commentId);
             if (comment == null)
-                return HttpResponse<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
+                return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
 
             comment.Cmt = model.Cmt;
           
 
-            int saved = await _unitOfWork.SaveChangesAsync();
+            int saved = await Repository.SaveChangesAsync();
 
             if (saved > 0)
-                return HttpResponse<int>.OK(model.Id, Messages.ItemUpdated);
+                return BaseResult<int>.OK(model.Id, Messages.ItemUpdated);
 
-            return HttpResponse<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.BadRequest);
+            return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.BadRequest);
         }
 
-        public async Task<HttpResponse<int>> DeleteComment(int id)
+        public async Task<BaseResult<int>> DeleteComment(int commentId)
         {
-            var comment = await Repository.FindAsync(id);
+            var comment = await Repository.FindAsync(commentId);
             if (comment == null)
-                return HttpResponse<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
+                return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
 
             comment.IsDeleted = true;
-            var saved = await _unitOfWork.SaveChangesAsync();
+            var saved = await Repository.SaveChangesAsync();
             if (saved > 0)
-                return HttpResponse<int>.OK(id, Messages.ItemDeleted);
+                return BaseResult<int>.OK(commentId, Messages.ItemDeleted);
 
-            return HttpResponse<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.BadRequest);
+            return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.BadRequest);
         }
     }
 }

@@ -22,12 +22,5 @@ namespace ProjectManager.APIs.Controllers
             var response = await _userService.GetAllUsers();
             return StatusCode(response);
         }
-
-        [HttpGet("task/{id:int}")]
-        public async Task<IActionResult> GetUsersByTaskId([FromRoute] int id)
-        {
-            var response = await _userService.GetUsersByTaskId(id);
-            return StatusCode(response);
-        }
     }
 }

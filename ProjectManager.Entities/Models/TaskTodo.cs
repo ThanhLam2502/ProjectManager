@@ -2,11 +2,11 @@
 
 namespace ProjectManager.Entities.Models
 {
-    public partial class ListTodo
+    public partial class TaskTodo
     {
-        public ListTodo()
+        public TaskTodo()
         {
-            Todo = new HashSet<Todo>();
+            TodoItem = new HashSet<TodoItem>();
         }
 
         public int Id { get; set; }
@@ -14,7 +14,7 @@ namespace ProjectManager.Entities.Models
         public int? TaskId { get; set; }
         public bool? IsDeleted { get; set; }
 
-        public virtual TaskProject Task { get; set; }
-        public virtual ICollection<Todo> Todo { get; set; }
+        public virtual TaskItem Task { get; set; }
+        public virtual ICollection<TodoItem> TodoItem { get; set; }
     }
 }

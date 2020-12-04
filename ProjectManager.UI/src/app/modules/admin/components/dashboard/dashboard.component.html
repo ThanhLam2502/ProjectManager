@@ -26,10 +26,10 @@
     </div>
     <main #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
 
-      <div *ngIf="projects">
-        <dx-list [dataSource]="projects" itemTemplate="listItem" selectionMode="single" class="list-item-p-0">
+      <div *ngIf="projects" class="popover-show-project">
+        <dx-list [dataSource]="projects" itemTemplate="listItem" selectionMode="single" class="list-item-p-0" style="margin: 0px;">
           <div *dxTemplate="let item of 'listItem'; let i = index">
-            <div class="result-wrap project-item" (click)="tabIndex = i; popoverDropdown.visible = false">
+            <div class="result-wrap project-item item-click" (click)="tabIndex = i; popoverDropdown.visible = false">
               <div>
                 <span class="project-item">{{ item.name }}</span>
               </div>
