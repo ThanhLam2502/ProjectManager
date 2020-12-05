@@ -15,59 +15,47 @@ namespace ProjectManager.APIs.Controllers
         {
             _todoService = todoService;
         }
-
-        // GET: api/todos/0
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetTodosByTaskID([FromRoute] int id)
-        {
-            var response = await _todoService.GetTodosByTaskID(id);
-            return StatusCode(response);
-        }
-        // POST api/todos
+        
         [HttpPost]
-        public async Task<IActionResult> InsertListTodo([FromBody] ListTodoViewModel model)
+        public async Task<IActionResult> InsertChecklistTodo([FromBody] ListTodoViewModel model)
         {
-            var response = await _todoService.InsertListTodo(model);
+            var response = await _todoService.InsertChecklistTodo(model);
             return StatusCode(response);
         }
 
-        // PUT api/todos/5
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateListTodo([FromBody] ListTodoViewModel model, int id)
+        [HttpPut("{checklistId:int}")]
+        public async Task<IActionResult> UpdateChecklistTodo([FromBody] ListTodoViewModel model,[FromRoute] int checklistId)
         {
-            var response = await _todoService.UpdateListTodo(model, id);
+            var response = await _todoService.UpdateChecklistTodo(model, checklistId);
             return StatusCode(response);
         }
 
-        // DELETE api/todos/3
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteListTodo(int id)
+        [HttpDelete("{checklistId:int}")]
+        public async Task<IActionResult> DeleteChecklistTodo([FromRoute]int checklistId)
         {
-            var response = await _todoService.DeleteListTodo(id);
+            var response = await _todoService.DeleteChecklistTodo(checklistId);
             return StatusCode(response);
         }
 
-        // POST api/todos/todo
-        [HttpPost("todo")]
-        public async Task<IActionResult> InsertTodo([FromBody] TodoViewModel model)
+        // POST api/todos/todo-item
+        [HttpPost("todo-item")]
+        public async Task<IActionResult> InsertTodoItem([FromBody] TodoViewModel model)
         {
-            var response = await _todoService.InsertTodo(model);
+            var response = await _todoService.InsertTodoItem(model);
             return StatusCode(response);
         }
 
-        // PUT api/todos/todo/2
-        [HttpPut("todo/{id:int}")]
-        public async Task<IActionResult> UpdateTodo([FromBody] TodoViewModel model, int id)
+        [HttpPut("todo-item/{todoId:int}")]
+        public async Task<IActionResult> UpdateTodoItem([FromBody] TodoViewModel model,[FromRoute] int todoId)
         {
-            var response = await _todoService.UpdateTodo(model, id);
+            var response = await _todoService.UpdateTodoItem(model, todoId);
             return StatusCode(response);
         }
 
-        // DELETE api/todos/todo/2
-        [HttpDelete("todo/{id:int}")]
-        public async Task<IActionResult> DeleteTodo(int id)
+        [HttpDelete("todo-item/{todoId:int}")]
+        public async Task<IActionResult> DeleteTodoItem([FromRoute] int todoId)
         {
-            var response = await _todoService.DeleteTodo(id);
+            var response = await _todoService.DeleteTodoItem(todoId);
             return StatusCode(response);
         }
 

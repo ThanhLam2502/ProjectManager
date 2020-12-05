@@ -65,7 +65,7 @@ namespace ProjectManager.Services
 
         public async Task<int> SaveChangesAsync()
         {
-            return await Repository.SaveChangesAsync();
+            return await UnitOfWork.SaveChangesAsync();
         }
     }
 }

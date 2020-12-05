@@ -11,6 +11,6 @@ namespace ProjectManager.Entities.Models
         public int? ListTodoId { get; set; }
         public bool? IsDeleted { get; set; }
 
-        public virtual TaskTodo ListTodo { get; set; }
+        public virtual TodoTask ListTodo { get; set; }
     }
 }

@@ -8,13 +8,12 @@ namespace ProjectManager.Entities.Services
 {
     public interface ITodoService : IBaseService<TodoItem>
     {
-        Task<BaseResult<int>> InsertTodo(TodoViewModel model);
-        Task<BaseResult<int>> UpdateTodo(TodoViewModel model, int id);
-        Task<BaseResult<int>> DeleteTodo(int id);
+        Task<BaseResult<int>> InsertTodoItem(TodoViewModel model);
+        Task<BaseResult<int>> UpdateTodoItem(TodoViewModel model, int id);
+        Task<BaseResult<int>> DeleteTodoItem(int id);
 
-        Task<BaseResult<List<ListTodoViewModel>>> GetTodosByTaskID(int taskId);
-        Task<BaseResult<int>> InsertListTodo(ListTodoViewModel model);
-        Task<BaseResult<int>> UpdateListTodo(ListTodoViewModel model, int id);
-        Task<BaseResult<int>> DeleteListTodo(int id);
+        Task<BaseResult<int>> InsertChecklistTodo(ListTodoViewModel model);
+        Task<BaseResult<int>> UpdateChecklistTodo(ListTodoViewModel model, int id);
+        Task<BaseResult<int>> DeleteChecklistTodo(int id);
     }
 }

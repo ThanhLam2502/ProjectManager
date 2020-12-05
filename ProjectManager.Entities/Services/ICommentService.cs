@@ -9,7 +9,7 @@ namespace ProjectManager.Entities.Services
     public interface ICommentService : IBaseService<Comment>
     {
         Task<BaseResult<int>> InsertComment(CommentViewModel model);
-        Task<BaseResult<int>> UpdateCmtContent(CommentViewModel model, int commentId);
+        Task<BaseResult<int>> UpdateCommentContent(CommentViewModel model, int commentId);
         Task<BaseResult<int>> DeleteComment(int commentId);
     }
 }

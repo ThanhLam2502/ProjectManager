@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ProjectManager.Entities.Models
 {
@@ -7,8 +8,8 @@ namespace ProjectManager.Entities.Models
         public TaskItem()
         {
             Comment = new HashSet<Comment>();
-            TaskTodo = new HashSet<TaskTodo>();
             TaskUser = new HashSet<TaskUser>();
+            TodoTask = new HashSet<TodoTask>();
         }
 
         public int Id { get; set; }
@@ -19,9 +20,9 @@ namespace ProjectManager.Entities.Models
         public int? ListTaskId { get; set; }
         public bool? IsDeleted { get; set; }
 
-        public virtual ProjectTask ListTask { get; set; }
+        public virtual TaskProject ListTask { get; set; }
         public virtual ICollection<Comment> Comment { get; set; }
-        public virtual ICollection<TaskTodo> TaskTodo { get; set; }
         public virtual ICollection<TaskUser> TaskUser { get; set; }
+        public virtual ICollection<TodoTask> TodoTask { get; set; }
     }
 }

@@ -15,35 +15,35 @@ namespace ProjectManager.Services
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IRepository<ProjectTask> _reposProjectTask;
+        private readonly IRepository<TaskProject> _reposProjectTask;
         private readonly IRepository<Comment> _reposComment;
-        private readonly IRepository<TaskTodo> _reposTodos;
+        private readonly IRepository<TodoTask> _reposTodos;
         private readonly IRepository<User> _reposUsers;
 
-        public TaskService(IUnitOfWork unitOfWork, 
-            IMapper mapper,
-            IRepository<ProjectTask> reposProjectTask, 
-            IRepository<Comment> reposComment,
-            IRepository<TaskTodo> reposTodos,
-            IRepository<User> reposUsers
-            ) : base(unitOfWork)
+        public TaskService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _reposProjectTask = reposProjectTask;
-            _reposComment = reposComment;
-            _reposTodos = reposTodos;
-            _reposUsers = reposUsers;
+            _reposProjectTask = _unitOfWork.Repository<TaskProject>();
+            _reposTodos = _unitOfWork.Repository<TodoTask>();
+            _reposComment = _unitOfWork.Repository<Comment>();
+            _reposUsers = _unitOfWork.Repository<User>();
         }
 
 
-        public async Task<BaseResult<TaskViewModel>> GetTaskByID(int taskId)
+        public async Task<BaseResult<TaskViewModel>> GetTaskDetailByID(int taskId)
         {
             var task = await Repository.FindAsync(taskId);
+
+            if (task == null)
+                return BaseResult<TaskViewModel>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
+
             var taskViewModel = _mapper.Map<TaskViewModel>(task);
+
             taskViewModel.Comments = _reposComment.GetCommentByTaskID(taskViewModel.Id);
             taskViewModel.Todos = _reposTodos.GetTodosByTaskID(taskViewModel.Id);
             taskViewModel.Members = _reposUsers.GetUsersByTaskId(taskViewModel.Id);
+
             return BaseResult<TaskViewModel>.OK(taskViewModel);
         }
 
@@ -67,9 +67,9 @@ namespace ProjectManager.Services
             task.Status = model.Status;
             task.ListTaskId = model.ListTaskId;
 
-            int saved = await Repository.SaveChangesAsync();
+            int saved = await _unitOfWork.SaveChangesAsync();
 
-            // Cho phep thay doi hoac khong thay doi
+            // Change or no change
             if (saved >= 0)
                 return BaseResult<int>.OK(task.Id, Messages.ItemUpdated);
 
@@ -83,7 +83,8 @@ namespace ProjectManager.Services
                 return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
 
             task.IsDeleted = true;
-            var saved = await Repository.SaveChangesAsync();
+
+            var saved = await _unitOfWork.SaveChangesAsync();
             if (saved > 0)
                 return BaseResult<int>.OK(id, Messages.ItemDeleted);
 
@@ -92,16 +93,16 @@ namespace ProjectManager.Services
 
 
 
-        public async Task<BaseResult<int>> InsertTasks(ListTaskViewModel model)
+        public async Task<BaseResult<int>> InsertBoard(ListTaskViewModel model)
         {
-            var listTask = _mapper.Map<ProjectTask>(model);
+            var listTask = _mapper.Map<TaskProject>(model);
 
             await _reposProjectTask.InsertAsync(listTask);
 
             return BaseResult<int>.OK(listTask.Id, Messages.ItemInserted);
         }
 
-        public async Task<BaseResult<int>> UpdateTasks(ListTaskViewModel model, int id)
+        public async Task<BaseResult<int>> UpdateBoard(ListTaskViewModel model, int id)
         {
             var listTask = await _reposProjectTask.FindAsync(id);
             if (listTask == null)
@@ -109,7 +110,7 @@ namespace ProjectManager.Services
 
             listTask.Name = model.Name;
             listTask.ProjectId = model.ProjectId;
-            int saved = await _reposProjectTask.SaveChangesAsync();
+            int saved = await _unitOfWork.SaveChangesAsync();
 
             if (saved > 0)
                 return BaseResult<int>.OK(listTask.Id, Messages.ItemUpdated);
@@ -117,14 +118,14 @@ namespace ProjectManager.Services
             return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.BadRequest);
         }
 
-        public async Task<BaseResult<int>> DeleteTasks(int id) 
+        public async Task<BaseResult<int>> DeleteBoard(int id)
         {
             var listTask = await _reposProjectTask.FindAsync(id);
             if (listTask == null)
                 return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
 
             listTask.IsDeleted = true;
-            var saved = await _reposProjectTask.SaveChangesAsync();
+            var saved = await _unitOfWork.SaveChangesAsync();
             if (saved > 0)
                 return BaseResult<int>.OK(id, Messages.ItemDeleted);
 

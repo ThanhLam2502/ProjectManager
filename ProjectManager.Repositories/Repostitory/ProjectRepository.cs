@@ -19,7 +19,7 @@ namespace ProjectManager.Repositories.Repostitory
                     EndDate = project.EndDate,
                     Status = project.Status,
                     AssignTo = project.AssignTo,
-                    Tasks = project.ProjectTask
+                    Tasks = project.TaskProject
                     .Where(lstask => lstask.IsDeleted != true)
                     .Select(lstask => new ListTaskViewModel
                     {

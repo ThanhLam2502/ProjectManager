@@ -70,6 +70,7 @@ export class TabContentComponent implements OnInit {
   }
 
   onClickEditTask(task: TaskViewModel) {
+    this.isEdit = true;
     // get taskInfo
     this.pmServive.getTaskByTaskId(task.id).subscribe((item) => {
       this.taskItem = item.data;

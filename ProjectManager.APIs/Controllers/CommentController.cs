@@ -24,9 +24,9 @@ namespace ProjectManager.APIs.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateCmtContent([FromBody] CommentViewModel model,[FromRoute] int commentId)
+        public async Task<IActionResult> UpdateCommentContent([FromBody] CommentViewModel model,[FromRoute] int commentId)
         {
-            var response = await _commentService.UpdateCmtContent(model, commentId);
+            var response = await _commentService.UpdateCommentContent(model, commentId);
             return StatusCode(response);
         }
 

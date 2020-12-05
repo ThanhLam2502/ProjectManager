@@ -7,9 +7,9 @@ namespace ProjectManager.Repositories.Repostitory
 {
     public static class TodosRepository
     {
-        public static IQueryable<ListTodoViewModel> GetTodosByTaskID(this IRepository<TaskTodo> repository, int taskId)
+        public static IQueryable<ListTodoViewModel> GetTodosByTaskID(this IRepository<TodoTask> repository, int taskId)
         {
-            var query = repository.Entities
+            return repository.Entities
                 .Where(todos => todos.TaskId == taskId && todos.IsDeleted != true)
                 .Select(todos => new ListTodoViewModel
                 {
@@ -25,8 +25,6 @@ namespace ProjectManager.Repositories.Repostitory
                         ListTodoId = todo.ListTodoId,
                     })
                 });
-
-            return query;
         }
     }
 }

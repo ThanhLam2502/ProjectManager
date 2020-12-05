@@ -17,19 +17,21 @@ namespace ProjectManager.Entities.Models
 
         public virtual DbSet<Comment> Comment { get; set; }
         public virtual DbSet<Project> Project { get; set; }
-        public virtual DbSet<ProjectTask> ProjectTask { get; set; }
         public virtual DbSet<TaskItem> TaskItem { get; set; }
-        public virtual DbSet<TaskTodo> TaskTodo { get; set; }
+        public virtual DbSet<TaskProject> TaskProject { get; set; }
         public virtual DbSet<TaskUser> TaskUser { get; set; }
         public virtual DbSet<TodoItem> TodoItem { get; set; }
+        public virtual DbSet<TodoTask> TodoTask { get; set; }
         public virtual DbSet<User> User { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
+#pragma warning disable CS1030 // #warning directive
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=(local);Database=PM-FresherDB;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Data Source=.\\SQLEXPRESS;Initial Catalog=PM-FresherDB;User ID=sa;Password=123");
+#pragma warning restore CS1030 // #warning directive
             }
         }
 
@@ -59,7 +61,7 @@ namespace ProjectManager.Entities.Models
                 entity.HasOne(d => d.Task)
                     .WithMany(p => p.Comment)
                     .HasForeignKey(d => d.TaskId)
-                    .HasConstraintName("FK_Comment_ProjectTask");
+                    .HasConstraintName("FK_Comment_TaskItem");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Comment)
@@ -81,22 +83,6 @@ namespace ProjectManager.Entities.Models
                     .HasConstraintName("FK_Project_User");
             });
 
-            modelBuilder.Entity<ProjectTask>(entity =>
-            {
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.IsDeleted).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.Name).HasMaxLength(50);
-
-                entity.Property(e => e.ProjectId).HasColumnName("ProjectID");
-
-                entity.HasOne(d => d.Project)
-                    .WithMany(p => p.ProjectTask)
-                    .HasForeignKey(d => d.ProjectId)
-                    .HasConstraintName("FK_ListTask_Project");
-            });
-
             modelBuilder.Entity<TaskItem>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -114,10 +100,10 @@ namespace ProjectManager.Entities.Models
                 entity.HasOne(d => d.ListTask)
                     .WithMany(p => p.TaskItem)
                     .HasForeignKey(d => d.ListTaskId)
-                    .HasConstraintName("FK_TaskItem_ProjectTask");
+                    .HasConstraintName("FK_TaskP_ListTask");
             });
 
-            modelBuilder.Entity<TaskTodo>(entity =>
+            modelBuilder.Entity<TaskProject>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
 
@@ -125,12 +111,12 @@ namespace ProjectManager.Entities.Models
 
                 entity.Property(e => e.Name).HasMaxLength(50);
 
-                entity.Property(e => e.TaskId).HasColumnName("TaskID");
+                entity.Property(e => e.ProjectId).HasColumnName("ProjectID");
 
-                entity.HasOne(d => d.Task)
-                    .WithMany(p => p.TaskTodo)
-                    .HasForeignKey(d => d.TaskId)
-                    .HasConstraintName("FK_TaskTodo_TaskItem");
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.TaskProject)
+                    .HasForeignKey(d => d.ProjectId)
+                    .HasConstraintName("FK_ListTask_Project");
             });
 
             modelBuilder.Entity<TaskUser>(entity =>
@@ -167,7 +153,23 @@ namespace ProjectManager.Entities.Models
                 entity.HasOne(d => d.ListTodo)
                     .WithMany(p => p.TodoItem)
                     .HasForeignKey(d => d.ListTodoId)
-                    .HasConstraintName("FK_TodoItem_TaskTodo");
+                    .HasConstraintName("FK_Todo_ListTodo");
+            });
+
+            modelBuilder.Entity<TodoTask>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Name).HasMaxLength(50);
+
+                entity.Property(e => e.TaskId).HasColumnName("TaskID");
+
+                entity.HasOne(d => d.Task)
+                    .WithMany(p => p.TodoTask)
+                    .HasForeignKey(d => d.TaskId)
+                    .HasConstraintName("FK_ListTodo_ProjectTask");
             });
 
             modelBuilder.Entity<User>(entity =>

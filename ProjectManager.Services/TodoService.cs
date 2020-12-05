@@ -23,14 +23,14 @@ namespace ProjectManager.Services
             _mapper = mapper;
         }
 
-        public async Task<BaseResult<int>> InsertTodo(TodoViewModel model)
+        public async Task<BaseResult<int>> InsertTodoItem(TodoViewModel model)
         {
             var todo = _mapper.Map<TodoItem>(model);
             await Repository.InsertAsync(todo);
             return BaseResult<int>.OK(todo.Id, Messages.ItemInserted);
         }
 
-        public async Task<BaseResult<int>> UpdateTodo(TodoViewModel model, int id)
+        public async Task<BaseResult<int>> UpdateTodoItem(TodoViewModel model, int id)
         {
             var todo = await Repository.FindAsync(id);
             if (todo == null)
@@ -40,6 +40,7 @@ namespace ProjectManager.Services
             todo.IsComplete = model.IsComplete;
             todo.ListTodoId = model.ListTodoId;
             int saved = await _unitOfWork.SaveChangesAsync();
+
             if (saved > 0)
                 return BaseResult<int>.OK(todo.Id, Messages.ItemUpdated);
 
@@ -47,7 +48,7 @@ namespace ProjectManager.Services
 
         }
 
-        public async Task<BaseResult<int>> DeleteTodo(int id)
+        public async Task<BaseResult<int>> DeleteTodoItem(int id)
         {
             var todo = await Repository.FindAsync(id);
             if (todo == null)
@@ -61,25 +62,17 @@ namespace ProjectManager.Services
             return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.BadRequest);
         }
 
-
-        public async Task<BaseResult<List<ListTodoViewModel>>> GetTodosByTaskID(int taskId)
+        public async Task<BaseResult<int>> InsertChecklistTodo(ListTodoViewModel model)
         {
-            var repos = _unitOfWork.Repository<TaskTodo>();
-            var todos = await repos.GetTodosByTaskID(taskId).ToListAsync();
-            return BaseResult<List<ListTodoViewModel>>.OK(todos);
-
-        }
-        public async Task<BaseResult<int>> InsertListTodo(ListTodoViewModel model)
-        {
-            var repos = _unitOfWork.Repository<TaskTodo>();
-            var listTodo = _mapper.Map<TaskTodo>(model);
+            var repos = _unitOfWork.Repository<TodoTask>();
+            var listTodo = _mapper.Map<TodoTask>(model);
             await repos.InsertAsync(listTodo);
             return BaseResult<int>.OK(listTodo.Id, Messages.ItemInserted);
         }
 
-        public async Task<BaseResult<int>> UpdateListTodo(ListTodoViewModel model, int id)
+        public async Task<BaseResult<int>> UpdateChecklistTodo(ListTodoViewModel model, int id)
         {
-            var repos = _unitOfWork.Repository<TaskTodo>();
+            var repos = _unitOfWork.Repository<TodoTask>();
             var listTodo = await repos.FindAsync(id);
 
             if (listTodo == null)
@@ -96,9 +89,9 @@ namespace ProjectManager.Services
 
         }
 
-        public async Task<BaseResult<int>> DeleteListTodo(int id)
+        public async Task<BaseResult<int>> DeleteChecklistTodo(int id)
         {
-            var repos = _unitOfWork.Repository<TaskTodo>();
+            var repos = _unitOfWork.Repository<TodoTask>();
             var listTodo = await repos.FindAsync(id);
             if (listTodo == null)
                 return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);

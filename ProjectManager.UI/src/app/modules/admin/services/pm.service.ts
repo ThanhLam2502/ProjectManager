@@ -44,16 +44,16 @@ export class PmService {
   }
 
   getTaskByTaskId(id: number): Observable<BaseResponse<TaskViewModel>> {
-    const url = `${this.taskUrl}/task_item/${id}`;
+    const url = `${this.taskUrl}/task-item/${id}`;
     return this.apiService.get(url);
   }
   addTask(task: TaskViewModel): Observable<BaseResponse<number>> {
-    const url = `${this.taskUrl}/task_item`;
+    const url = `${this.taskUrl}/task-item`;
     return this.apiService.post(url, task);
   }
 
   editTask(task: TaskViewModel): Observable<BaseResponse<number>> {
-    const url = `${this.taskUrl}/task_item/${task.id}`;
+    const url = `${this.taskUrl}/task-item/${task.id}`;
     return this.apiService.update(url, task);
   }
 
@@ -86,15 +86,15 @@ export class PmService {
 
 
   addTodo(todo: TodoViewModel): Observable<BaseResponse<number>> {
-    const url = `${this.todoUrl}/todo`;
+    const url = `${this.todoUrl}/todo-item`;
     return this.apiService.post(url, todo);
   }
   editTodo(todo: TodoViewModel): Observable<BaseResponse<number>> {
-    const url = `${this.todoUrl}/todo/${todo.id}`;
+    const url = `${this.todoUrl}/todo-item/${todo.id}`;
     return this.apiService.update(url, todo);
   }
   delTodo(id: number): Observable<BaseResponse<number>> {
-    const url = `${this.todoUrl}/todo/${id}`;
+    const url = `${this.todoUrl}/todo-item/${id}`;
     return this.apiService.delete(url);
   }
 

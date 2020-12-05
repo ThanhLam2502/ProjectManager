@@ -27,7 +27,7 @@ namespace ProjectManager.Services
             return BaseResult<int>.OK(comment.Id, Messages.ItemInserted);
         }
 
-        public async Task<BaseResult<int>> UpdateCmtContent(CommentViewModel model, int commentId)
+        public async Task<BaseResult<int>> UpdateCommentContent(CommentViewModel model, int commentId)
         {
             var comment = await Repository.FindAsync(commentId);
             if (comment == null)
@@ -36,7 +36,7 @@ namespace ProjectManager.Services
             comment.Cmt = model.Cmt;
           
 
-            int saved = await Repository.SaveChangesAsync();
+            int saved = await _unitOfWork.SaveChangesAsync();
 
             if (saved > 0)
                 return BaseResult<int>.OK(model.Id, Messages.ItemUpdated);
@@ -51,7 +51,7 @@ namespace ProjectManager.Services
                 return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
 
             comment.IsDeleted = true;
-            var saved = await Repository.SaveChangesAsync();
+            var saved = await _unitOfWork.SaveChangesAsync();
             if (saved > 0)
                 return BaseResult<int>.OK(commentId, Messages.ItemDeleted);
 

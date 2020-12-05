@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace ProjectManager.Entities.Models
 {
-    public partial class ProjectTask
+    public partial class TaskProject
     {
-        public ProjectTask()
+        public TaskProject()
         {
             TaskItem = new HashSet<TaskItem>();
         }

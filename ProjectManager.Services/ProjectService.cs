@@ -43,7 +43,7 @@ namespace ProjectManager.Services
                 return BaseResult<int>.Error(Messages.ActionFailed, statusCode: System.Net.HttpStatusCode.NoContent);
 
             project.IsDeleted = true;
-            var saved = await Repository.DbContext.SaveChangesAsync();
+            var saved = await _unitOfWork.SaveChangesAsync();
             if (saved > 0)
                 return BaseResult<int>.OK(projectID, Messages.ItemDeleted);
 
@@ -63,7 +63,7 @@ namespace ProjectManager.Services
             project.AssignTo = model.AssignTo;
             project.Status = model.Status;
 
-            int saved = await Repository.DbContext.SaveChangesAsync();
+            int saved = await _unitOfWork.SaveChangesAsync();
 
             if (saved > 0)
                 return BaseResult<int>.OK(project.Id, Messages.ItemUpdated);

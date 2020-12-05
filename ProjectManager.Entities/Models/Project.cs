@@ -7,7 +7,7 @@ namespace ProjectManager.Entities.Models
     {
         public Project()
         {
-            ProjectTask = new HashSet<ProjectTask>();
+            TaskProject = new HashSet<TaskProject>();
         }
 
         public int Id { get; set; }
@@ -19,6 +19,6 @@ namespace ProjectManager.Entities.Models
         public bool? IsDeleted { get; set; }
 
         public virtual User AssignToNavigation { get; set; }
-        public virtual ICollection<ProjectTask> ProjectTask { get; set; }
+        public virtual ICollection<TaskProject> TaskProject { get; set; }
     }
 }

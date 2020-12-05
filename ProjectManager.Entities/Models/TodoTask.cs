@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ProjectManager.Entities.Models
 {
-    public partial class TaskTodo
+    public partial class TodoTask
     {
-        public TaskTodo()
+        public TodoTask()
         {
             TodoItem = new HashSet<TodoItem>();
         }
